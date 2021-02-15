@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>{{.stack.parentpomgroup}}</groupId>
+  <artifactId>{{.stack.parentpomid}}</artifactId>
+  <version>{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}</version>
+  <packaging>pom</packaging>
+
+<!-- comment out parent for now
+  <parent>
+    <groupId>net.wasdev.maven.parent</groupId>
+    <artifactId>default-parent</artifactId>
+    <version>1.4</version>
+  </parent>
+-->
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <!-- Plugins -->
+    <version.maven-war-plugin>3.2.2</version.maven-war-plugin>
+    <version.dockerfile-maven-plugin>1.4.10</version.dockerfile-maven-plugin>
+    <version.maven-surefire-plugin>3.0.0-M1</version.maven-surefire-plugin>
+    <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
+
+  </properties>
+
+    <repositories>
+        <repository>
+            <id>localrepository</id>
+            <url>/mvn/repository</url>
+        </repository>
+    </repositories>
+
+  <build>
+    <!-- ensure fixed archive name so multistage build can find app archive -->
+    <finalName>app</finalName>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <executions>
+            <execution>
+              <phase>validate</phase>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                    <requireJavaVersion>
+                      <version>[1.8,)</version>
+                    </requireJavaVersion>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <source>1.8</source>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>

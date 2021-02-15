@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ "$TRAVIS" == "true" ]
+then
+    echo "Setting Travis environment"
+
+    export GIT_BRANCH=${TRAVIS_BRANCH}
+    export GIT_ORG_REPO=${TRAVIS_REPO_SLUG}
+    export INDEX_VERSION=${TRAVIS_BUILD_NUMBER}
+
+    # Either enable or customize how long-running tasks are watched
+    export CI_WAIT_FOR="true"
+  # export CI_WAIT_FOR="$script_dir/ci_wait.sh --interval 3 --limit 30"
+
+    # Trim all output to ensure max log length is not exceeded
+    export VERBOSE=true
+
+    if [ $TRAVIS_TAG ] && [ "$TRAVIS_TAG" == "$TRAVIS_BRANCH" ]
+    then
+        echo "This is a release build for $TRAVIS_TAG"
+        IMAGE_REGISTRY_PUBLISH=true
+    else
+        IMAGE_REGISTRY_PUBLISH=false
+    fi
+fi
